@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
+from PIL import ImageTk,Image
 window=Tk()
 window.geometry("600x600")
-window.title("Nyan Linn Htet of Banking system GUI App")
+window.title("Banking system GUI App of Nyan Linn Htet")
 window.configure(bg='light blue')
-class BankMain:
+class BankMain():
     def __init__(Na,Am,Ad,pi):
         db=len(Userlist)
         to_insert={db:{'name':Na,'amount':Am,'address':Ad,'pin':pi}}
@@ -16,6 +17,7 @@ class BankMain:
 
 class Withdraw:
     def __init__(self):
+        signal2=0
         for x in range(len(Userlist)):
             if Userlist[x]['name']==dewname.get():
                 if Userlist[x]['amount']>int(dewithdraw.get()):
@@ -23,55 +25,61 @@ class Withdraw:
                     messagebox.showinfo('Withdrawlist','Thank you for your withdraw!\n {}:{}'.format(Userlist[x]['name'],Userlist[x]['amount']))
                     Forth.withdraw()
                     window.deiconify()
+                    signal2=1
                     break     
                 elif Userlist[x]['amount']<int(dewithdraw.get()):
                     messagebox.showerror('Error','Your bank account have not enough for withdraw!\n __Please check up!')
                     break
-        else:
+        if signal2==0:
             messagebox.showerror('Error','Something wrong!\n ')
             Forth.deiconify()
 
 class Deposit:
     def __init__(self):
+        signal3=0
         for x in range(len(Userlist)):
                 if Userlist[x]['name']==dename.get():
                     Userlist[x]['amount']+=int(deamount.get()) 
                     messagebox.showinfo('Depositlist','Thank you for your deposit \n {}:{}'.format(Userlist[x]['name'],Userlist[x]['amount']))
                     Third.withdraw()
                     window.deiconify()
+                    signal3=1
                     break
-        else:
+        if signal3==0:
             messagebox.showerror('Error','This name have not in this list!')
             Third.deiconify()
 
 class Removelist(Withdraw):
     def __init__(self):
         # if deremove.get() == name.get():
+        signal1=0
         for x in range(len(Userlist)):
                 if Userlist[x]['name']==deremove.get():
                     Userlist.pop(x)
                     messagebox.showinfo('Removelist','We have been remove your register account!')
                     Fiveth.withdraw()
                     window.deiconify()
+                    signal1=1
                     break
-        else:
+        if signal1 == 0:
             messagebox.showerror('Error',"This '{}' name have not in program!".format(deremove.get()))
             Fiveth.withdraw()
             window.deiconify()
        
 class Checklist(Removelist):
     def __init__(self):
+        signal=0
         for i in range(len(Userlist)):
-                if Userlist[i]['name']==decheck.get() and Userlist[i]['pin']==int(decheckpin.get()):
-                    messagebox.showinfo('Checkinglist','{}\n "This is your Register list!"'.format(Userlist[i]))
-                    Sixth.withdraw()
-                    window.deiconify()
-                    break
-        else:
+            if decheck.get() == Userlist[i]['name'] and int(decheckpin.get()) == Userlist[i]['pin']:
+                messagebox.showinfo('Checkinglist','{}\n "This is your Register list!"'.format(Userlist[i]))
+                Sixth.withdraw()
+                window.deiconify()
+                signal=1
+                break
+        if signal == 0:
             messagebox.showerror('Error',"You are wrong something name or pin!")
             Sixth.deiconify()
             
-                
 class Controlpin:
         def user():
             BankMain.__init__(listName.get(),int(listAmount.get()),listAddress.get(),int(listPin.get()))
@@ -142,8 +150,8 @@ class Checkpin:
             userbackbtn.place(x=250,y=500,height=50,width=50)
 class Removepin:
         def userwamount():
-            Removelist.__init__(Removelist)
-
+                Removelist.__init__(Removelist)
+    
         def backacc():
             Fiveth.withdraw()
             window.deiconify()    
@@ -156,8 +164,6 @@ class Removepin:
             Fiveth.configure(bg='light blue')
             lbl1=Label(Fiveth,text="•♥•.¸¸.•♥•.¸¸.•♥•Remove•♥•.¸¸.•♥•.¸¸.•♥•",font=('Ariel',10),background='light blue')
             lbl1.place(x=190, y=80)
-            # lbl1=Label(Fiveth,text="If you are leave this program,you type 'end'!",font=('Ariel',10),background='light blue')
-            # lbl1.place(x=190, y=120)
             lbl3=Label(Fiveth,text='Customer_Name:',font=('Ariel',10),background='light blue')
             lbl3.place(x=150,y=200)
             deremove=Entry(Fiveth,width=30)
@@ -169,8 +175,8 @@ class Removepin:
             
 class Withdrawpin:
         def userwamount():
-            Withdraw.__init__(Withdraw)
-
+                Withdraw.__init__(Withdraw)
+            
         def backacc():
             Forth.withdraw()
             window.deiconify()  
@@ -220,8 +226,8 @@ class Depositpin:
             lbl3.place(x=150,y=200)
             deamount=Entry(Third,width=30)
             deamount.place(x=300,y=200)
-            userallbtn=Button(Third,text='Send',command=Depositpin.useramount)
-            userallbtn.place(x=250,y=300,height=50,width=50)
+            userdepobtn=Button(Third,text='Send',command=Depositpin.useramount)
+            userdepobtn.place(x=250,y=300,height=50,width=50)
             userbackbtn=Button(Third,text='Back',command=Depositpin.backacc)
             userbackbtn.place(x=250,y=500,height=50,width=50)
 
@@ -252,7 +258,13 @@ class Main:
         userbtn.place(x=420,y=330,height=35,width=35)
         userbtn=Button(text=6,command=ending)
         userbtn.place(x=510,y=330,height=35,width=35)
-
+        my_img=ImageTk.PhotoImage(Image.open('image.png'))
+        lbl=Label(image=my_img,background='light blue')
+        lbl.place(x=280, y=400)
+        lbl=Label(text="Please attention : Next new features will come to this banking system.\n Coming soon we will come back the best."
+                  ,font=('Ariel',10),background='light blue')
+        lbl.place(x=80, y=450)
+        
 Userlist={}
 Userpin={}
 window.mainloop()
